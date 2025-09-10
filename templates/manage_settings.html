@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Settings | Skyhighes Technologies</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .settings-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .setting-group {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .setting-description {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    {% extends "admin_base.html" %}
+
+    {% block page_title %}System Settings{% endblock %}
+
+    {% block content %}
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>System Settings</h2>
+            </div>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <div class="settings-card">
+                <form method="POST">
+                    {% for setting in settings %}
+                    <div class="setting-group">
+                        <label for="{{ setting.setting_key }}" class="form-label fw-bold">
+                            {{ setting.setting_key|replace('_', ' ')|title }}
+                        </label>
+                        
+                        {% if setting.setting_key.endswith('_notifications') %}
+                        <select class="form-select" id="{{ setting.setting_key }}" name="{{ setting.setting_key }}">
+                            <option value="true" {% if setting.setting_value == 'true' %}selected{% endif %}>Enabled</option>
+                            <option value="false" {% if setting.setting_value == 'false' %}selected{% endif %}>Disabled</option>
+                        </select>
+                        {% elif 'time' in setting.setting_key %}
+                        <input type="time" class="form-control" id="{{ setting.setting_key }}" name="{{ setting.setting_key }}" value="{{ setting.setting_value }}">
+                        {% else %}
+                        <input type="text" class="form-control" id="{{ setting.setting_key }}" name="{{ setting.setting_key }}" value="{{ setting.setting_value }}">
+                        {% endif %}
+                        
+                        <div class="setting-description">
+                            {{ setting.description }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <button type="submit" name="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i> Save Settings
+                    </button>
+                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-times me-2"></i> Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+    {% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

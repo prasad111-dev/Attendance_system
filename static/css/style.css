@@ -1,0 +1,142 @@
+/* Premium CSS Styles */
+:root {
+    --primary: #1a2a6c;
+    --secondary: #b21f1f;
+    --accent: #ff8a00;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f7fb;
+    color: #333;
+}
+
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e3e6f0;
+    padding: 0.75rem 1.25rem;
+    position: relative;
+    border-top-left-radius: 0.5rem !important;
+    border-top-right-radius: 0.5rem !important;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.bg-dark {
+    background-color: var(--dark) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: #0d1b4c;
+    border-color: #0d1b4c;
+}
+
+.btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.navbar {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+}
+
+.hero-section {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    padding: 4rem 2rem;
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.table th {
+    font-weight: 600;
+    color: #4e73df;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(78, 115, 223, 0.05);
+}
+
+.alert {
+    border-radius: 0.5rem;
+}
+
+.badge {
+    font-weight: 500;
+    padding: 0.5em 0.75em;
+}
+
+.bg-success {
+    background-color: var(--success) !important;
+}
+
+.bg-info {
+    background-color: var(--info) !important;
+}
+
+.bg-warning {
+    background-color: var(--warning) !important;
+}
+
+.bg-danger {
+    background-color: var(--danger) !important;
+}
+
+.footer {
+    background-color: var(--dark);
+    color: white;
+    padding: 2rem 0;
+    margin-top: 2rem;
+}
+
+/* Chart containers */
+.chart-area {
+    position: relative;
+    height: 20rem;
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 2rem 1rem;
+    }
+    
+    .card-header h6 {
+        font-size: 1rem;
+    }
+}

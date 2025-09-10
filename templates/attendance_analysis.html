@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Analysis | Skyhighes Technologies</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #1a2a6c;
+            --secondary: #b21f1f;
+            --accent: #ff8a00;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.12);
+            --card-radius: 16px;
+        }
+        
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: var(--card-radius);
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .chart-container {
+            height: 400px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: var(--card-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .stats-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .filter-section {
+            background: white;
+            border-radius: var(--card-radius);
+            box-shadow: var(--card-shadow);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .date-filter {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-premium {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+        
+        .btn-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .tab-content {
+            padding: 20px 0;
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            color: #6c757d;
+            font-weight: 500;
+            padding: 12px 25px;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary);
+            background: white;
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .card-title {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(26, 42, 108, 0.1);
+        }
+        
+        .data-card {
+            background: white;
+            border-radius: var(--card-radius);
+            box-shadow: var(--card-shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .data-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+            
+            .stats-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% extends "admin_base.html" %}
+
+    {% block page_title %}Attendance Analysis{% endblock %}
+
+    {% block content %}
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 style="color: var(--primary);">Attendance Analytics Dashboard</h2>
+                <div class="dropdown">
+                    <button class="btn btn-premium dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-download me-2"></i> Export Reports
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">PDF Report</a></li>
+                        <li><a class="dropdown-item" href="#">Excel Data</a></li>
+                        <li><a class="dropdown-item" href="#">CSV File</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Real-time Stats Overview -->
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <i class="fas fa-users fa-2x mb-2"></i>
+                        <div class="stats-number">
+                            {% set total_today = analysis_data.counts | sum %}
+                            {{ total_today }}
+                        </div>
+                        <div class="stats-label">Today's Attendance</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <i class="fas fa-check-circle fa-2x mb-2"></i>
+                        <div class="stats-number">
+                            {% if analysis_data.counts and analysis_data.statuses %}
+                                {% set present_index = analysis_data.statuses.index('Present') %}
+                                {{ analysis_data.counts[present_index] if present_index != -1 else 0 }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </div>
+                        <div class="stats-label">Present Today</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <i class="fas fa-clock fa-2x mb-2"></i>
+                        <div class="stats-number">
+                            {% if analysis_data.counts and analysis_data.statuses %}
+                                {% set late_index = analysis_data.statuses.index('Late') %}
+                                {{ analysis_data.counts[late_index] if late_index != -1 else 0 }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </div>
+                        <div class="stats-label">Late Today</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <i class="fas fa-chart-line fa-2x mb-2"></i>
+                        <div class="stats-number">
+                            {% if analysis_data.weekly_present and analysis_data.weekly_present|length > 1 %}
+                                {{ ((analysis_data.weekly_present[-1] / analysis_data.weekly_present[-2]) * 100 - 100) | round(1) }}%
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </div>
+                        <div class="stats-label">Weekly Change</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <h4 class="card-title">Filter Data</h4>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="date-filter">
+                            <div class="form-group">
+                                <label class="form-label">From Date</label>
+                                <input type="date" class="form-control" id="startDate">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">To Date</label>
+                                <input type="date" class="form-control" id="endDate">
+                            </div>
+                            <div class="form-group" style="align-self: flex-end;">
+                                <button class="btn btn-premium" id="applyFilter">
+                                    <i class="fas fa-filter me-2"></i> Apply Filter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <select class="form-select" id="departmentFilter">
+                                <option value="all">All Departments</option>
+                                {% for dept in analysis_data.dept_names %}
+                                    <option value="{{ dept }}">{{ dept }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabs for different chart views -->
+            <ul class="nav nav-tabs" id="analysisTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">Overview</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="weekly-tab" data-bs-toggle="tab" data-bs-target="#weekly" type="button" role="tab">Weekly</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="monthly-tab" data-bs-toggle="tab" data-bs-target="#monthly" type="button" role="tab">Monthly</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="department-tab" data-bs-toggle="tab" data-bs-target="#department" type="button" role="tab">By Department</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="analysisTabsContent">
+                <!-- Overview Tab -->
+                <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="dashboard-card">
+                                <h4 class="card-title">Today's Attendance Distribution</h4>
+                                <div class="chart-container">
+                                    <canvas id="todayChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="dashboard-card">
+                                <h4 class="card-title">Attendance Trend (Last 7 Days)</h4>
+                                <div class="chart-container">
+                                    <canvas id="trendChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="dashboard-card">
+                                <h4 class="card-title">Monthly Comparison</h4>
+                                <div class="chart-container">
+                                    <canvas id="monthlyComparisonChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Weekly Tab -->
+                <div class="tab-pane fade" id="weekly" role="tabpanel">
+                    <div class="dashboard-card mt-4">
+                        <h4 class="card-title">Weekly Attendance Trend</h4>
+                        <div class="chart-container">
+                            <canvas id="weeklyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Monthly Tab -->
+                <div class="tab-pane fade" id="monthly" role="tabpanel">
+                    <div class="dashboard-card mt-4">
+                        <h4 class="card-title">Monthly Attendance Overview</h4>
+                        <div class="chart-container">
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Department Tab -->
+                <div class="tab-pane fade" id="department" role="tabpanel">
+                    <div class="dashboard-card mt-4">
+                        <h4 class="card-title">Department-wise Attendance</h4>
+                        <div class="chart-container">
+                            <canvas id="departmentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Today's Attendance Pie Chart
+        const todayCtx = document.getElementById('todayChart').getContext('2d');
+        const todayChart = new Chart(todayCtx, {
+            type: 'doughnut',
+            data: {
+                labels: {{ analysis_data.statuses | tojson }},
+                datasets: [{
+                    data: {{ analysis_data.counts | tojson }},
+                    backgroundColor: [
+                        '#28a745', // Present - green
+                        '#ffc107', // Late - yellow
+                        '#dc3545', // Absent - red
+                        '#17a2b8', // Half Day - teal
+                        '#6f42c1'  // Overtime - purple
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            font: {
+                                size: 13,
+                                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%',
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            }
+        });
+        
+        // Weekly Attendance Chart
+        const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+        const weeklyChart = new Chart(weeklyCtx, {
+            type: 'line',
+            data: {
+                labels: {{ analysis_data.weeks | tojson }},
+                datasets: [
+                    {
+                        label: 'Present',
+                        data: {{ analysis_data.weekly_present | tojson }},
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Late',
+                        data: {{ analysis_data.weekly_late | tojson }},
+                        borderColor: '#ffc107',
+                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Absent',
+                        data: {{ analysis_data.weekly_absent | tojson }},
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Monthly Attendance Chart
+        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        const monthlyChart = new Chart(monthlyCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ analysis_data.months | tojson }},
+                datasets: [
+                    {
+                        label: 'Present',
+                        data: {{ analysis_data.monthly_present | tojson }},
+                        backgroundColor: '#28a745',
+                        barPercentage: 0.6,
+                    },
+                    {
+                        label: 'Late',
+                        data: {{ analysis_data.monthly_late | tojson }},
+                        backgroundColor: '#ffc107',
+                        barPercentage: 0.6,
+                    },
+                    {
+                        label: 'Absent',
+                        data: {{ analysis_data.monthly_absent | tojson }},
+                        backgroundColor: '#dc3545',
+                        barPercentage: 0.6,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        grid: {
+                            drawBorder: false
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Department Chart
+        const deptCtx = document.getElementById('departmentChart').getContext('2d');
+        const departmentChart = new Chart(deptCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ analysis_data.dept_names | tojson }},
+                datasets: [
+                    {
+                        label: 'Present',
+                        data: {{ analysis_data.dept_present | tojson }},
+                        backgroundColor: '#28a745',
+                    },
+                    {
+                        label: 'Late',
+                        data: {{ analysis_data.dept_late | tojson }},
+                        backgroundColor: '#ffc107',
+                    },
+                    {
+                        label: 'Absent',
+                        data: {{ analysis_data.dept_absent | tojson }},
+                        backgroundColor: '#dc3545',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        grid: {
+                            drawBorder: false
+                        }
+                    }
+                }
+            }
+        });
+        
+        // 7-Day Trend Chart
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        const trendChart = new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Attendance Rate',
+                    data: [85, 92, 78, 95, 88, 65, 70],
+                    borderColor: '#1a2a6c',
+                    backgroundColor: 'rgba(26, 42, 108, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 50,
+                        max: 100,
+                        grid: {
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Monthly Comparison Chart
+        const monthlyCompCtx = document.getElementById('monthlyComparisonChart').getContext('2d');
+        const monthlyComparisonChart = new Chart(monthlyCompCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [
+                    {
+                        label: '2023',
+                        data: [85, 78, 90, 82, 88, 92],
+                        backgroundColor: 'rgba(26, 42, 108, 0.7)',
+                        barPercentage: 0.6,
+                    },
+                    {
+                        label: '2024',
+                        data: [88, 82, 95, 90, 92, 96],
+                        backgroundColor: 'rgba(255, 138, 0, 0.7)',
+                        barPercentage: 0.6,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        grid: {
+                            drawBorder: false
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Real-time updates with AJAX
+        function updateCharts() {
+            fetch('/api/attendance_stats')
+                .then(response => response.json())
+                .then(data => {
+                    // Update your charts with new data
+                    todayChart.data.datasets[0].data = data.today_counts;
+                    todayChart.update();
+                    
+                    weeklyChart.data.datasets[0].data = data.weekly_present;
+                    weeklyChart.data.datasets[1].data = data.weekly_late;
+                    weeklyChart.data.datasets[2].data = data.weekly_absent;
+                    weeklyChart.update();
+                    
+                    // Update other charts similarly...
+                });
+        }
+        
+        // Update charts every 5 minutes
+        setInterval(updateCharts, 300000);
+        
+        // Filter functionality
+        document.getElementById('applyFilter').addEventListener('click', function() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const department = document.getElementById('departmentFilter').value;
+            
+            // Send request to server to get filtered data
+            fetch(`/api/attendance_stats?start=${startDate}&end=${endDate}&dept=${department}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update charts with filtered data
+                    todayChart.data.datasets[0].data = data.today_counts;
+                    todayChart.update();
+                    
+                    weeklyChart.data.labels = data.weeks;
+                    weeklyChart.data.datasets[0].data = data.weekly_present;
+                    weeklyChart.data.datasets[1].data = data.weekly_late;
+                    weeklyChart.data.datasets[2].data = data.weekly_absent;
+                    weeklyChart.update();
+                    
+                    // Update other charts similarly...
+                });
+        });
+    </script>
+</body>
+</html>

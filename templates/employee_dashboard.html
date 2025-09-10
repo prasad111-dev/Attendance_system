@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard | Skyhighes Technologies</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a2a6c;
+            --secondary: #b21f1f;
+            --accent: #ff8a00;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+        .employee-header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .profile-header {
+            background: linear-gradient(to right, #3a5fc5, #1a2a6c);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid white;
+            margin: 0 auto 15px;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #666;
+            overflow: hidden;
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .attendance-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .attendance-status {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .btn-checkin {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .btn-checkout {
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .btn-request {
+            background: linear-gradient(to right, #654ea3, #da22ff);
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .history-table {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .badge-present {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+        }
+        .badge-late {
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+        }
+        .badge-halfday {
+            background: linear-gradient(to right, #654ea3, #da22ff);
+        }
+        .badge-pending {
+            background: linear-gradient(to right, #ffd700, #ffa500);
+        }
+        .badge-approved {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+        }
+        .badge-rejected {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="employee-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="fas fa-camera-retro me-3"></i> Skyhighes Technologies</h1>
+                    <p>Premium Attendance System</p>
+                </div>
+                <div>
+                    <a href="/logout" class="btn btn-light">
+                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Profile Card -->
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            {% if data.employee.profile_image %}
+                                <img src="{{ url_for('static', filename=data.employee.profile_image) }}" alt="Profile">
+                            {% else %}
+                                <i class="fas fa-user"></i>
+                            {% endif %}
+                        </div>
+                        <h3>{{ data.employee.name }}</h3>
+                        <p>{{ data.employee.department }} Department</p>
+                    </div>
+                    <div class="profile-body p-3">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <small>Employee ID</small>
+                                <div><strong>{{ session.employee_id }}</strong></div>
+                            </div>
+                            <div class="col-6">
+                                <small>Position</small>
+                                <div><strong>{{ data.employee.position }}</strong></div>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <small>Join Date</small>
+                                <div><strong>{{ data.employee.join_date.strftime('%d %b %Y') }}</strong></div>
+                            </div>
+                            <div class="col-6">
+                                <small>Status</small>
+                                <div><span class="badge bg-success">Active</span></div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="text-center">
+                            <a href="/employee/update_profile" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-user-edit me-1"></i> Update Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Attendance -->
+                <div class="attendance-card mt-4">
+                    <h4 class="mb-4">Today's Attendance</h4>
+                    
+                    {% if data.is_non_working %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> Today is a non-working day
+                        </div>
+                    {% elif data.today_attendance %}
+                        {% if data.today_attendance.check_out %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i> You've completed your attendance today
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <small>Check In</small>
+                                    <div><strong>{{ data.today_attendance.check_in.strftime('%H:%M') }}</strong></div>
+                                </div>
+                                <div class="col-6">
+                                    <small>Check Out</small>
+                                    <div><strong>{{ data.today_attendance.check_out.strftime('%H:%M') }}</strong></div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i> You checked in at {{ data.today_attendance.check_in.strftime('%H:%M') }}
+                            </div>
+                        {% endif %}
+                        
+                        <div class="attendance-status mt-3">
+                            Status: 
+                            {% if data.today_attendance.status == 'present' %}
+                                <span class="badge badge-present">Present</span>
+                            {% elif data.today_attendance.status == 'late' %}
+                                <span class="badge badge-late">Late</span>
+                            {% elif data.today_attendance.status == 'half_day' %}
+                                <span class="badge badge-halfday">Half Day</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ data.today_attendance.status }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        {% if not data.today_attendance.check_out %}
+                            <button class="btn btn-checkout">
+                                <i class="fas fa-sign-out-alt me-2"></i> Check Out
+                            </button>
+                        {% endif %}
+                    {% elif data.checkin_request %}
+                        {% if data.checkin_request.status == 'pending' %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-clock me-2"></i> Manual check-in request pending approval
+                            </div>
+                            <div class="attendance-status">
+                                Status: <span class="badge badge-pending">Pending</span>
+                            </div>
+                        {% elif data.checkin_request.status == 'approved' %}
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i> Manual check-in approved
+                            </div>
+                        {% else %}
+                            <div class="alert alert-danger">
+                                <i class="fas fa-times-circle me-2"></i> Manual check-in request rejected
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i> You haven't checked in today
+                        </div>
+                        <button class="btn btn-checkin" data-bs-toggle="modal" data-bs-target="#checkinModal">
+                            <i class="fas fa-fingerprint me-2"></i> Check In Now
+                        </button>
+                        <button class="btn btn-request" data-bs-toggle="modal" data-bs-target="#requestModal">
+                            <i class="fas fa-hand-paper me-2"></i> Request Manual Check-in
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+                <!-- Attendance History -->
+                <div class="history-table">
+                    <div class="table-header bg-light p-3">
+                        <h4 class="mb-0">Attendance History</h4>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Check In</th>
+                                    <th>Check Out</th>
+                                    <th>Status</th>
+                                    <th>Confidence</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in data.attendance_history %}
+                                <tr>
+                                    <td>{{ record.check_in.strftime('%d %b %Y') }}</td>
+                                    <td>{{ record.check_in.strftime('%H:%M') }}</td>
+                                    <td>{{ record.check_out.strftime('%H:%M') if record.check_out else '-' }}</td>
+                                    <td>
+                                        {% if record.status == 'present' %}
+                                            <span class="badge badge-present">Present</span>
+                                        {% elif record.status == 'late' %}
+                                            <span class="badge badge-late">Late</span>
+                                        {% elif record.status == 'half_day' %}
+                                            <span class="badge badge-halfday">Half Day</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ record.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ record.confidence|round(2) }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No attendance records found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Leave Request -->
+                <div class="attendance-card mt-4">
+                    <h4 class="mb-4">Leave Request</h4>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i> You can submit leave requests here
+                    </div>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i> Request Leave
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual Check-in Request Modal -->
+    <div class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="requestModalLabel">Request Manual Check-in</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="/employee/request_checkin">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Reason for manual check-in</label>
+                            <textarea class="form-control" name="reason" rows="3" required></textarea>
+                        </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> Your request will be reviewed by admin
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light py-4 mt-5">
+        <div class="container">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2024 Skyhighes Technologies. Premium Attendance System.</p>
+                <p class="text-muted">Employee Portal v2.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

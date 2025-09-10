@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recognition Control | Skyhighes Technologies</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .control-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .status-active {
+            color: #28a745;
+        }
+        .status-inactive {
+            color: #dc3545;
+        }
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .camera-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .camera-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .status-online {
+            background-color: #28a745;
+        }
+        .status-offline {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    {% extends "admin_base.html" %}
+
+    {% block page_title %}CCTV Recognition{% endblock %}
+
+    {% block content %}
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Recognition System Control</h2>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="control-card">
+                        <h4 class="mb-4">System Control</h4>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <h5 class="mb-0 me-3">Recognition Status:</h5>
+                                    <span id="recognition-status" class="{% if recognition_active %}status-active{% else %}status-inactive{% endif %}">
+                                        <i class="fas fa-circle"></i> {% if recognition_active %}ACTIVE{% else %}INACTIVE{% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <button id="start-btn" class="btn btn-success me-2" {% if recognition_active %}disabled{% endif %}>
+                                    <i class="fas fa-play me-2"></i> Start Recognition
+                                </button>
+                                <button id="stop-btn" class="btn btn-danger" {% if not recognition_active %}disabled{% endif %}>
+                                    <i class="fas fa-stop me-2"></i> Stop Recognition
+                                </button>
+                            </div>
+                        </div>
+                        
+                       <!-- In the recognition_control.html template, update the train button section -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <button id="train-btn" class="btn btn-primary">
+            <i class="fas fa-brain me-2"></i> Train Model
+        </button>
+        <div id="training-status" class="alert alert-info mt-2" style="display: none;">
+            <i class="fas fa-spinner fa-spin me-2"></i> Training in progress...
+        </div>
+        <div id="training-result" class="mt-2"></div>
+        <div class="form-text mt-2">Retrain the facial recognition model with current data</div>
+    </div>
+</div>
+
+<script>
+    // Add this script to the recognition_control.html template
+    document.getElementById('train-btn').addEventListener('click', function() {
+        const trainingStatus = document.getElementById('training-status');
+        const trainingResult = document.getElementById('training-result');
+        
+        trainingStatus.style.display = 'block';
+        trainingResult.innerHTML = '';
+        
+        fetch('/admin/model/train', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            trainingStatus.style.display = 'none';
+            
+            if (data.success) {
+                trainingResult.innerHTML = `
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i> ${data.message}
+                    </div>
+                `;
+                // Update AI status in system information
+                document.getElementById('ai-status').textContent = 'Loaded';
+            } else {
+                trainingResult.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i> ${data.message}
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            trainingStatus.style.display = 'none';
+            trainingResult.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i> Error: ${error}
+                </div>
+            `;
+        });
+    });
+</script>
+                    
+                    <div class="control-card">
+                        <h4 class="mb-4">Cameras</h4>
+                        <div class="row">
+                            {% for camera_id, camera in cameras.items() %}
+                            <div class="col-md-6 mb-3">
+                                <div class="camera-card">
+                                    <h5>{{ camera.name }}</h5>
+                                    <p class="text-muted mb-2">{{ camera.location }}</p>
+                                    <div class="mb-2">
+                                        Status: 
+                                        <span class="camera-status {% if camera.status == 'active' %}status-online{% else %}status-offline{% endif %}"></span>
+                                        {{ camera.status|title }}
+                                    </div>
+                                    <div class="text-truncate small text-muted" title="{{ camera.rtsp_url }}">
+                                        {{ camera.rtsp_url }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="stats-card">
+                        <h5 class="mb-4">Recognition Statistics</h5>
+                        <div class="row text-center">
+                            <div class="col-6 mb-3">
+                                <div class="stat-value" id="faces-detected">0</div>
+                                <div>Faces Detected</div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="stat-value" id="employees-recognized">0</div>
+                                <div>Employees Recognized</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="stat-value" id="unknown-faces">0</div>
+                                <div>Unknown Faces</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="stat-value" id="last-recognition">N/A</div>
+                                <div>Last Recognition</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <h5 class="mb-4">System Information</h5>
+                        <div class="mb-2">
+                            <strong>AI Model:</strong> 
+                            <span id="ai-status">{% if AI_AVAILABLE %}Loaded{% else %}Not Available{% endif %}</span>
+                        </div>
+                        <div class="mb-2">
+                            <strong>Recognition Hours:</strong> 10:00 - 21:00
+                        </div>
+                        <div class="mb-2">
+                            <strong>Active Cameras:</strong> {{ cameras|length }}
+                        </div>
+                        <div>
+                            <strong>Last Model Training:</strong> <span id="model-last-trained">N/A</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('start-btn').addEventListener('click', function() {
+            fetch('/api/recognition/start', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Recognition service started');
+                        updateUI(true);
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                });
+        });
+        
+        document.getElementById('stop-btn').addEventListener('click', function() {
+            fetch('/api/recognition/stop', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Recognition service stopped');
+                        updateUI(false);
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                });
+        });
+        
+        document.getElementById('train-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to train the model? This may take several minutes.')) {
+                fetch('/api/model/train', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                    });
+            }
+        });
+        
+        function updateUI(isActive) {
+            const statusElem = document.getElementById('recognition-status');
+            const startBtn = document.getElementById('start-btn');
+            const stopBtn = document.getElementById('stop-btn');
+            
+            if (isActive) {
+                statusElem.innerHTML = '<i class="fas fa-circle"></i> ACTIVE';
+                statusElem.className = 'status-active';
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+            } else {
+                statusElem.innerHTML = '<i class="fas fa-circle"></i> INACTIVE';
+                statusElem.className = 'status-inactive';
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        }
+        
+        // Periodically update stats
+        function updateStats() {
+            fetch('/api/recognition/status')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('faces-detected').textContent = data.stats.faces_detected;
+                    document.getElementById('employees-recognized').textContent = data.stats.employees_recognized;
+                    document.getElementById('unknown-faces').textContent = data.stats.unknown_faces;
+                    
+                    if (data.stats.last_recognition) {
+                        // Format the timestamp if needed
+                        document.getElementById('last-recognition').textContent = 'Recent';
+                    }
+                    
+                    updateUI(data.active);
+                });
+        }
+        
+        // Update stats every 5 seconds
+        setInterval(updateStats, 5000);
+        updateStats(); // Initial update
+    </script>
+    {% endblock %}
+</body>
+</html>

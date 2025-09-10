@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Employee | Skyhighes Technologies</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 20px;
+        }
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .attendance-table {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .badge-present {
+            background-color: #28a745;
+        }
+        .badge-late {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .badge-half_day {
+            background-color: #17a2b8;
+        }
+        .badge-absent {
+            background-color: #dc3545;
+        }
+        .badge-overtime {
+            background-color: #6f42c1;
+        }
+        .nav-tabs .nav-link.active {
+            font-weight: bold;
+            border-bottom: 3px solid #1a2a6c;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Employee Details</h2>
+                <a href="/admin/employees" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Employees
+                </a>
+            </div>
+            
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-image">
+                        {% if employee.profile_image %}
+                            <img src="{{ url_for('static', filename=employee.profile_image) }}" alt="Profile">
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center h-100 bg-light">
+                                <i class="fas fa-user fa-2x text-secondary"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h3>{{ employee.name }}</h3>
+                        <p class="text-muted mb-0">{{ employee.position }} | {{ employee.department }}</p>
+                        <p class="text-muted">Employee ID: {{ employee.employee_id }}</p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Personal Information</h5>
+                        <table class="table table-sm">
+                            <tr>
+                                <th>Email:</th>
+                                <td>{{ employee.email or 'N/A' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Phone:</th>
+                                <td>{{ employee.phone or 'N/A' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>
+                                    {% if employee.status == 'active' %}
+                                        <span class="badge bg-success">Active</span>
+                                    {% elif employee.status == 'inactive' %}
+                                        <span class="badge bg-danger">Inactive</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">Suspended</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Join Date:</th>
+                                <td>{{ employee.join_date.strftime('%Y-%m-%d') }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Emergency Contact</h5>
+                        <table class="table table-sm">
+                            <tr>
+                                <th>Contact Person:</th>
+                                <td>{{ employee.emergency_contact or 'N/A' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Emergency Phone:</th>
+                                <td>{{ employee.emergency_phone or 'N/A' }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <ul class="nav nav-tabs" id="employeeTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="attendance-tab" data-bs-toggle="tab" data-bs-target="#attendance" type="button" role="tab">Attendance Records</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="requests-tab" data-bs-toggle="tab" data-bs-target="#requests" type="button" role="tab">Check-in Requests</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="employeeTabsContent">
+                <div class="tab-pane fade show active" id="attendance" role="tabpanel">
+                    <div class="attendance-table mt-3">
+                        <div class="table-header bg-light p-3">
+                            <h5 class="mb-0">Attendance History</h5>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Check In</th>
+                                        <th>Check Out</th>
+                                        <th>Status</th>
+                                        <th>Confidence</th>
+                                        <th>Location</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for record in attendance_records %}
+                                    <tr>
+                                        <td>{{ record.check_in.strftime('%Y-%m-%d') }}</td>
+                                        <td>{{ record.check_in.strftime('%H:%M:%S') }}</td>
+                                        <td>{{ record.check_out.strftime('%H:%M:%S') if record.check_out else 'N/A' }}</td>
+                                        <td>
+                                            {% if record.status == 'present' %}
+                                                <span class="badge badge-present">Present</span>
+                                            {% elif record.status == 'late' %}
+                                                <span class="badge badge-late">Late</span>
+                                            {% elif record.status == 'half_day' %}
+                                                <span class="badge badge-half_day">Half Day</span>
+                                            {% elif record.status == 'overtime' %}
+                                                <span class="badge badge-overtime">Overtime</span>
+                                            {% else %}
+                                                <span class="badge badge-absent">{{ record.status|title }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ record.confidence|round(2) }}</td>
+                                        <td>{{ record.location or 'N/A' }}</td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">No attendance records found</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="requests" role="tabpanel">
+                    <div class="attendance-table mt-3">
+                        <div class="table-header bg-light p-3">
+                            <h5 class="mb-0">Check-in Requests</h5>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Request Date</th>
+                                        <th>Reason</th>
+                                        <th>Status</th>
+                                        <th>Reviewed At</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for request in checkin_requests %}
+                                    <tr>
+                                        <td>{{ request.request_date.strftime('%Y-%m-%d') }}</td>
+                                        <td>{{ request.reason or 'No reason provided' }}</td>
+                                        <td>
+                                            {% if request.status == 'pending' %}
+                                                <span class="badge bg-warning">Pending</span>
+                                            {% elif request.status == 'approved' %}
+                                                <span class="badge bg-success">Approved</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Rejected</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ request.reviewed_at.strftime('%Y-%m-%d %H:%M') if request.reviewed_at else 'N/A' }}</td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="4" class="text-center">No check-in requests found</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

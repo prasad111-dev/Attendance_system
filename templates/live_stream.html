@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Stream | Skyhighes Technologies</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .stream-container {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .stream-header {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .stream-frame {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .latency-info {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 10;
+            font-size: 12px;
+        }
+        .camera-controls {
+            margin-bottom: 20px;
+        }
+        #video-feed {
+            width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Live CCTV Stream</h2>
+                <div class="camera-controls">
+                    <select class="form-select" id="camera-select">
+                        {% for camera_id, camera in cameras.items() %}
+                            <option value="{{ camera_id }}">{{ camera.name }} - {{ camera.location }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="stream-container">
+                        <div class="stream-header">
+                            <span id="camera-name">Main Entrance</span>
+                            <span class="ms-3" id="stream-status">
+                                <i class="fas fa-circle text-success"></i> Live
+                            </span>
+                        </div>
+                        <div class="latency-info" id="latency-info">
+                            Latency: <span id="latency-value">0</span>ms
+                        </div>
+                        <img src="{{ url_for('video_feed') }}" class="stream-frame" id="video-feed">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    // Update the script section in live_stream.html
+<!-- Update the script section in live_stream.html -->
+<script>
+    const video = document.getElementById('video-feed');
+    let lastFrameTime = Date.now();
+    let latencyUpdateInterval;
+    
+    // Function to update latency information
+    function updateLatencyInfo() {
+        const now = Date.now();
+        const latency = now - lastFrameTime;
+        
+        // Update latency display
+        document.getElementById('latency-value').textContent = Math.min(999, latency);
+        
+        // Update status based on latency
+        const statusElement = document.getElementById('stream-status');
+        if (latency < 100) {
+            statusElement.innerHTML = '<i class="fas fa-circle text-success"></i> Live (Low Latency)';
+        } else if (latency < 500) {
+            statusElement.innerHTML = '<i class="fas fa-circle text-warning"></i> Live (Medium Latency)';
+        } else {
+            statusElement.innerHTML = '<i class="fas fa-circle text-danger"></i> Live (High Latency)';
+        }
+    }
+    
+    // Monitor when new frames are loaded
+    video.onload = function() {
+        lastFrameTime = Date.now();
+        
+        // Force periodic refresh to prevent freezing
+        const src = video.src;
+        video.src = '';
+        video.src = src;
+    };
+    
+    // Handle stream errors
+    video.onerror = function() {
+        document.getElementById('stream-status').innerHTML = 
+            '<i class="fas fa-circle text-danger"></i> Disconnected';
+        document.getElementById('latency-value').textContent = 'N/A';
+    };
+    
+    // Start latency monitoring
+    latencyUpdateInterval = setInterval(updateLatencyInfo, 100);
+    
+    // Force refresh every 3 seconds to prevent freezing
+    setInterval(function() {
+        if (video.naturalWidth === 0) {
+            const src = video.src;
+            video.src = '';
+            video.src = src;
+        }
+    }, 3000);
+    
+    // Camera selection
+    document.getElementById('camera-select').addEventListener('change', function() {
+        document.getElementById('camera-name').textContent = this.options[this.selectedIndex].text;
+        // In a full implementation, this would switch the video feed source
+    });
+    
+    // Clean up on page unload
+    window.addEventListener('beforeunload', function() {
+        clearInterval(latencyUpdateInterval);
+    });
+</script>
+</body>
+</html>

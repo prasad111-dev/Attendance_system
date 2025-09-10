@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCTV Configuration | Skyhighes Technologies</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .config-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .camera-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .camera-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .camera-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .status-active {
+            background-color: #28a745;
+        }
+        .status-inactive {
+            background-color: #6c757d;
+        }
+        .status-maintenance {
+            background-color: #ffc107;
+        }
+        .test-btn {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>CCTV Configuration</h2>
+            </div>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <div class="config-card">
+                <h4 class="mb-4">Add/Edit Camera</h4>
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="camera_id" class="form-label">Camera ID</label>
+                                <input type="text" class="form-control" id="camera_id" name="camera_id" required>
+                                <div class="form-text">Unique identifier for the camera</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Camera Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location</label>
+                                <input type="text" class="form-control" id="location" name="location" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="rtsp_url" class="form-label">RTSP URL</label>
+                                <input type="text" class="form-control" id="rtsp_url" name="rtsp_url" required>
+                                <div class="form-text">Example: rtsp://username:password@ip_address:port/stream</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="maintenance">Maintenance</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i> Save Configuration
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary test-btn" id="test-connection">
+                                    <i class="fas fa-plug me-2"></i> Test Connection
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="config-card">
+                <h4 class="mb-4">Configured Cameras</h4>
+                {% if cameras %}
+                    {% for camera_id, camera in cameras.items() %}
+                    <div class="camera-card">
+                        <div class="camera-header">
+                            <h5 class="mb-0">{{ camera.name }}</h5>
+                            <span>
+                                <span class="camera-status {% if camera.status == 'active' %}status-active{% elif camera.status == 'inactive' %}status-inactive{% else %}status-maintenance{% endif %}"></span>
+                                {{ camera.status|title }}
+                            </span>
+                        </div>
+                        <p class="mb-2"><strong>Location:</strong> {{ camera.location }}</p>
+                        <p class="mb-2 text-truncate"><strong>RTSP URL:</strong> {{ camera.rtsp_url }}</p>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-outline-primary edit-camera" data-camera-id="{{ camera_id }}" data-camera-name="{{ camera.name }}" data-camera-location="{{ camera.location }}" data-camera-rtsp="{{ camera.rtsp_url }}" data-camera-status="{{ camera.status }}">
+                                <i class="fas fa-edit me-1"></i> Edit
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i> No cameras configured yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Test RTSP connection
+        document.getElementById('test-connection').addEventListener('click', function() {
+            const rtspUrl = document.getElementById('rtsp_url').value;
+            if (!rtspUrl) {
+                alert('Please enter an RTSP URL first');
+                return;
+            }
+            
+            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Testing...';
+            this.disabled = true;
+            
+            // In a real implementation, you would make an API call to test the connection
+            // For now, we'll simulate a test with a timeout
+            setTimeout(() => {
+                alert('Connection test completed. This is a simulation - actual implementation would connect to the RTSP stream.');
+                this.innerHTML = '<i class="fas fa-plug me-2"></i> Test Connection';
+                this.disabled = false;
+            }, 2000);
+        });
+        
+        // Edit camera functionality
+        document.querySelectorAll('.edit-camera').forEach(button => {
+            button.addEventListener('click', function() {
+                const cameraId = this.getAttribute('data-camera-id');
+                const cameraName = this.getAttribute('data-camera-name');
+                const cameraLocation = this.getAttribute('data-camera-location');
+                const cameraRtsp = this.getAttribute('data-camera-rtsp');
+                const cameraStatus = this.getAttribute('data-camera-status');
+                
+                document.getElementById('camera_id').value = cameraId;
+                document.getElementById('name').value = cameraName;
+                document.getElementById('location').value = cameraLocation;
+                document.getElementById('rtsp_url').value = cameraRtsp;
+                document.getElementById('status').value = cameraStatus;
+                
+                // Scroll to the form
+                document.querySelector('.config-card').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+2025-08-27 19:26:52,803 - keras_facenet.embedding_model - INFO - Loading weights.
+2025-08-27 19:26:52,811 - keras_facenet.utils - INFO - Looking for C:\Users\HP/.keras-facenet\20180402-114759\20180402-114759-weights.h5
+2025-08-27 19:27:01,223 - tensorflow - WARNING - From D:\AI_based_Face_recognization\kali\lib\site-packages\keras\src\backend\tensorflow\core.py:232: The name tf.placeholder is deprecated. Please use tf.compat.v1.placeholder instead.
+
+2025-08-27 19:27:02,110 - __main__ - INFO - Auto-training model on startup
+2025-08-27 19:27:02,111 - __main__ - ERROR - Error checking for auto-training: name 'train_model' is not defined
+2025-08-27 19:27:02,199 - __main__ - INFO - Database initialized successfully
+2025-08-27 19:27:02,348 - __main__ - INFO - Database initialized successfully
+2025-08-27 19:27:02,351 - __main__ - INFO - Using cached model (age: 327s)
+2025-08-27 19:27:02,360 - werkzeug - WARNING -  * Debugger is active!
+2025-08-27 19:27:02,366 - werkzeug - INFO -  * Debugger PIN: 133-306-453
+2025-08-27 19:27:20,350 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:20] "GET / HTTP/1.1" 200 -
+2025-08-27 19:27:22,352 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:22] "GET /login HTTP/1.1" 200 -
+2025-08-27 19:27:28,897 - __main__ - INFO - Admin login: admin
+2025-08-27 19:27:28,900 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:28] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-08-27 19:27:29,009 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:29] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-08-27 19:27:31,386 - __main__ - INFO - Webcam recognition service started with enhanced error handling
+2025-08-27 19:27:31,386 - __main__ - INFO - Recognition service started
+2025-08-27 19:27:31,393 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:31] "POST /api/recognition/start HTTP/1.1" 200 -
+2025-08-27 19:27:35,939 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:35] "GET /admin/employees HTTP/1.1" 200 -
+2025-08-27 19:27:35,992 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:35] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:27:41,973 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:41] "GET /admin/checkin_requests HTTP/1.1" 200 -
+2025-08-27 19:27:42,071 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:42] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:27:43,906 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:43] "GET /admin/recognition HTTP/1.1" 200 -
+2025-08-27 19:27:43,970 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:43] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:27:43,975 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:43] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:27:45,556 - __main__ - INFO - Model saved successfully
+2025-08-27 19:27:45,572 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:45] "POST /admin/model/train HTTP/1.1" 200 -
+2025-08-27 19:27:48,987 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:48] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:27:52,085 - __main__ - INFO - Model saved successfully
+2025-08-27 19:27:52,096 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:52] "POST /admin/model/train HTTP/1.1" 200 -
+2025-08-27 19:27:54,177 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:54] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:27:54,180 - __main__ - INFO - Model saved successfully
+2025-08-27 19:27:54,192 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:54] "POST /api/model/train HTTP/1.1" 200 -
+2025-08-27 19:27:58,987 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:27:58] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:28:00,146 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:28:00] "GET /admin/checkin_requests HTTP/1.1" 200 -
+2025-08-27 19:28:00,202 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:28:00] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:28:02,563 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:28:02] "GET /admin/model_dashboard HTTP/1.1" 200 -
+2025-08-27 19:28:02,819 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:28:02] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:28:07,857 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:28:07] "GET /admin/test_face_recognition HTTP/1.1" 200 -
+2025-08-27 19:28:07,973 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:28:07] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:28:15,459 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:28:15] "GET /admin/employees HTTP/1.1" 200 -
+2025-08-27 19:28:15,521 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:28:15] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:28:16,249 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:28:16] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-08-27 19:28:29,040 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:28:29] "GET /live-stream HTTP/1.1" 200 -
+2025-08-27 19:28:29,161 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:28:29] "GET /video-feed HTTP/1.1" 200 -
+2025-08-27 19:28:49,523 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:28:56,070 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:28:56,450 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:00,616 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:04,669 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:08,705 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:12,578 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:16,989 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:21,048 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:24,405 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:26,711 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:29:26] "GET /admin/recognition HTTP/1.1" 200 -
+2025-08-27 19:29:26,785 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:29:26] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:29:26,812 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:29:26] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:29:29,229 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:31,809 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:29:31] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:29:32,690 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:35,762 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:36,794 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:29:36] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:29:41,792 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:29:41] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:29:44,152 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:46,789 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:29:46] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:29:46,970 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:50,022 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:51,795 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:29:51] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:29:53,003 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:56,070 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:29:56,789 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:29:56] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:29:56,804 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:29:56] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:29:58,907 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:01,815 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:01] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:30:01,871 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:04,751 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:06,810 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:06] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:30:07,834 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:10,776 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:11,813 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:11] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:30:13,713 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:16,671 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:16,813 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:16] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:30:19,700 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:21,807 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:21] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:30:22,762 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:25,679 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:26,814 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:26] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:30:26,815 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:26] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:30:28,739 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:31,647 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:31,799 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:31] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:30:34,695 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:36,797 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:36] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:30:37,596 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:41,810 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:41] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:30:45,775 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:46,799 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:46] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:30:51,233 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:51,802 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:51] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:30:54,295 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:30:56,812 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:56] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:30:56,820 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:30:56] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:30:57,232 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:00,257 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:01,793 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:01] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:31:03,112 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:06,180 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:06,800 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:06] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:31:09,108 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:11,793 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:11] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:31:12,157 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:15,026 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:16,808 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:16] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:31:18,128 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:20,908 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:21,809 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:21] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:31:24,067 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:26,825 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:26] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:31:26,830 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:26] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:31:26,903 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:30,017 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:31,802 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:31] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:31:36,804 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:36] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:31:40,739 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:41,810 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:41] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:31:43,865 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:46,674 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:46,804 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:46] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:31:49,781 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:51,814 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:51] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:31:52,630 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:55,725 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:31:56,800 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:56] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:31:56,802 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:31:56] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:31:58,611 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:01,729 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:01,806 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:01] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:32:04,552 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:06,806 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:06] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:32:07,666 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:10,498 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:11,809 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:11] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:32:13,666 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:16,519 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:16,795 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:16] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:32:19,660 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:21,790 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:21] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:32:25,089 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:26,793 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:26] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:32:26,801 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:26] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:32:28,092 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:30,952 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:31,798 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:31] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:32:33,973 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:36,792 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:36] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:32:41,806 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:41] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:32:41,848 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:46,810 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:46] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:32:47,065 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:50,060 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:51,789 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:51] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:32:52,973 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:55,919 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:32:56,804 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:56] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:32:56,807 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:32:56] "GET /api/pending_requests_count HTTP/1.1" 200 -
+2025-08-27 19:32:58,781 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:01,801 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:33:01] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:33:01,839 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:04,630 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:06,807 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:33:06] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:33:07,686 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:10,505 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:11,792 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:33:11] "GET /api/recognition/status HTTP/1.1" 200 -
+2025-08-27 19:33:14,297 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:14,633 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:33:14] "GET /live-stream HTTP/1.1" 200 -
+2025-08-27 19:33:14,735 - werkzeug - INFO - 192.168.31.230 - - [27/Aug/2025 19:33:14] "GET /video-feed HTTP/1.1" 200 -
+2025-08-27 19:33:18,662 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:23,266 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:26,384 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:31,498 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:38,567 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:45,675 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:49,721 - werkzeug - INFO -  * Detected change in 'D:\\ass\\app_premium\\premium_app1.py', reloading
+2025-08-27 19:33:52,579 - __main__ - ERROR - Error processing face: 'low_confidence_rejections'
+2025-08-27 19:33:52,862 - __main__ - INFO - CCTV recognition service stopped
+2025-08-27 19:33:52,865 - __main__ - INFO - Recognition service stopped
+2025-08-27 19:33:52,865 - __main__ - INFO - Application shutting down
